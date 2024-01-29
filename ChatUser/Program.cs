@@ -3,12 +3,13 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 class Program
 {
     static int _userName;
-    private const string _host = "192.168.2.33";
+    private const string _host = "192.168.1.51";
     private const int port = 8888;
     static int _receiverName;
     static TcpClient _tcpClient;
@@ -32,8 +33,8 @@ class Program
 
             var message = new Message
             {
-                SenderName = _userName,
-                ReceiverName = _receiverName,
+                SenderId = _userName,
+                ReceiverId = _receiverName,
                 Content = ""
             };
 
@@ -69,8 +70,8 @@ class Program
             string content = Console.ReadLine();
             var message = new Message
             {
-                SenderName = _userName,
-                ReceiverName = _receiverName,
+                SenderId = _userName,
+                ReceiverId = _receiverName,
                 Content = content
             };
 
@@ -99,8 +100,8 @@ class Program
                 }
                 while (_stream.DataAvailable);
 
-                string message = builder.ToString();
-                Console.WriteLine(message);
+                var message = JsonSerializer.Deserialize<Message>(builder.ToString());
+                Console.WriteLine(message?.Content);
             }
             catch
             {
