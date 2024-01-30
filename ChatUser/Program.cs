@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 class Program
 {
     static int _userName;
-    private const string _host = "192.168.1.51";
+    private const string _host = "192.168.2.33";
     private const int port = 8888;
     static int _receiverName;
     static TcpClient _tcpClient;
