@@ -1,4 +1,5 @@
 ﻿using ChatUser;
+using Newtonsoft.Json;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -38,7 +39,7 @@ class Program
                 Content = ""
             };
 
-            var jsonMessage = JsonSerializer.Serialize(message);
+            var jsonMessage = JsonConvert.SerializeObject(message);
             byte[] data = Encoding.UTF8.GetBytes(jsonMessage);
 
             _stream.Write(data, 0, data.Length);
@@ -76,9 +77,12 @@ class Program
             };
 
 
-            var jsonMessage = JsonSerializer.Serialize(message);
+            var jsonMessage = JsonConvert.SerializeObject(message);
             byte[] data = Encoding.UTF8.GetBytes(jsonMessage);
-            _stream.Write(data, 0, data.Length);
+            Task.Run(async () =>
+            {
+                await _stream.WriteAsync(data, 0, data.Length);
+            });
         }
     }
 
@@ -95,12 +99,13 @@ class Program
 
                 do
                 {
+                    
                     bytes = _stream.Read(data, 0, data.Length);
                     builder.Append(Encoding.UTF8.GetString(data, 0, bytes));
                 }
                 while (_stream.DataAvailable);
 
-                var message = JsonSerializer.Deserialize<Message>(builder.ToString());
+                var message = JsonConvert.DeserializeObject<Message>(builder.ToString());
                 Console.WriteLine(message?.Content);
             }
             catch
