@@ -89,7 +89,7 @@ class Program
 
     static void ReceiveMessage()
     {
-        byte[] data = new byte[64];
+        byte[] data = new byte[128];
 
         while (true)
         {
@@ -106,7 +106,7 @@ class Program
                 }
                 while (_stream.DataAvailable);
 
-                var message = JsonConvert.DeserializeObject<Message>(builder.ToString());
+                var message = System.Text.Json.JsonSerializer.Deserialize<Message>(builder.ToString());
                 Console.WriteLine(message?.Content);
             }
             catch
