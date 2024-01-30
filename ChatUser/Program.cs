@@ -89,11 +89,12 @@ class Program
 
     static void ReceiveMessage()
     {
+        byte[] data = new byte[64];
+
         while (true)
         {
             try
             {
-                byte[] data = new byte[64];
                 StringBuilder builder = new StringBuilder();
                 int bytes = 0;
 
